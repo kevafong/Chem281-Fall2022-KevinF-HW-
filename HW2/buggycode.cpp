@@ -32,25 +32,24 @@ allocator::allocator() : head({NULL, NULL, 0}) // initializes head with no next,
 
 allocator::~allocator() //desctuctor
 {
-  header* buffer = head.next; // sets a buffer to next
+  header* buffer = head.next; 
   while (buffer)
     {
-    header* nextbuffer = buffer->next;  // until buffer is null, sets nextbuffer to next
-    release((char*) buffer + sizeof(header));     //releases buffer and header??
-    buffer = nextbuffer;                // set buffer to nextbuffer
+    header* nextbuffer = buffer->next;  
+    release((char*) buffer + sizeof(header));
+    buffer = nextbuffer;
     }
 }
 
 void
 allocator::release(void* mem) //releases memory
 {
-  header* buffer = (header*)((char*) mem - sizeof(header)); //remove header from mem
-  uint64_t memsize = buffer->size;                          //set buffer size
-  buffer->previous->next = buffer->next;                    // sets the next of the previous pointer to the next
-  if (buffer->next) {
-    buffer->next->previous = buffer->previous;              //*if theres a next, set the previous of next to previous, added brackets
-    }    
-  munmap(buffer, memsize); // unmaps buffer of memsize
+  header* buffer = (header*)((char*) mem - sizeof(header));
+  uint64_t memsize = buffer->size;
+  buffer->previous->next = buffer->next;
+  if (buffer->next)
+    buffer->next->previous = buffer->previous;            
+  munmap(buffer, memsize); 
 }
 
 void*
@@ -60,11 +59,11 @@ allocator::allocate(uint64_t size)
   const size_t allocSize = (size*sizeof(char*)+sizeof(header)+offbits) & (~offbits); // * allocSize should be size*size of the character
   header* buffer = (header*) mmap(NULL, allocSize, PROT_READ|PROT_WRITE,  // PROT_READ: pages may be read, PROT_WRITE: pages bay be accessed
 				  MAP_PRIVATE|MAP_ANONYMOUS , -1 , 0);          // MAP_PRIVATE: create a private copy on write mapping, MAP_ANON: mapping is not backed by file, contents are zero, fd -1, offset 0
-  buffer->next = head.next; //set next of buffers next to head next
-  buffer->previous = &head; //set buffer previous as head
-  buffer->size = allocSize; //header size
-  head.next = buffer;       // set head next as the buffer
-  return (char*) buffer+sizeof(header); // why am i returning the pointer 8 bytes away
+  buffer->next = head.next;
+  buffer->previous = &head;
+  buffer->size = allocSize;
+  head.next = buffer;   
+  return (char*) buffer+sizeof(header); 
 }
 
 double mean(const double* array, const uint64_t len)
@@ -72,24 +71,24 @@ double mean(const double* array, const uint64_t len)
   double mean = 0.d+00;
   for (uint64_t i=0; i<len; i++)
     mean += array[i];
-  return mean/len; // *mean is sum of number of elements, need to divide by len of array
+  return mean/len;    // ADDED /len, definition of mean 
 }
 
-allocator* globalAllocator=NULL; // a null global allocator, will be replaced by allocator class if global is null 
+allocator* globalAllocator=NULL; 
 
-void compute(double* a, double*& b, uint64_t len2) //calls allocator, global allocator
+void compute(double* a, double*& b, uint64_t len2) 
 {
   uint64_t looplen = len2;
-  static allocator getmem;
-  globalAllocator = globalAllocator == NULL ? &getmem : globalAllocator; //ternary operator, if globalAllocator is NULL, it assign global to getme otherwise it returns the globalAllocator.
+  static allocator getmem;      // ADDED STATIC, does not call destrcutor even when scope of compute is exited
+  globalAllocator = globalAllocator == NULL ? &getmem : globalAllocator; 
   if (b==NULL)  {
-    b = (double*) globalAllocator->allocate(looplen); // currently returning another NULL pointer, should allocate a pointer for b
+    b = (double*) globalAllocator->allocate(looplen); 
   }  
   for (unsigned int j=0; j<looplen; j++)
     b[j] = rand()%2 ? -a[j] : a[j];
-}                                                     // destructor of allocator is called, this releases the data in b
+}                                        
 
-uint64_t getarrdim()    //what does this do??
+uint64_t getarrdim()    //what is the point of this??
 {
   uint64_t dim1 = rand();
   uint64_t dim2 = rand();
@@ -98,7 +97,7 @@ uint64_t getarrdim()    //what does this do??
   return dim2/dim3;
 }
 
-void getdata(const char* datafile, double*& buffer, uint64_t& len) // reading the address of len
+void getdata(const char* datafile, double*& buffer, uint64_t& len)
 {
   int fd = open(datafile, O_RDONLY);
   if (fd == -1)
@@ -106,7 +105,7 @@ void getdata(const char* datafile, double*& buffer, uint64_t& len) // reading th
     printf("ERROR: File cannot open file %s\n", datafile);
     exit(1);  
     }
-  read(fd, &len, sizeof(uint64_t)); // this reads 8 bytes into the address of len, first line of the data file is the size
+  read(fd, &len, sizeof(uint64_t)); 
   double* buffer2=new double[len];  // *allocate correct memory to a new buffer, assign pointer, delete the first.
   delete [] buffer;
   buffer=buffer2;
@@ -117,24 +116,24 @@ void getdata(const char* datafile, double*& buffer, uint64_t& len) // reading th
 
 int main(int argc, char* argv[])
 {
-  srand(222209);  //random seed
-  if (argc < 2)   //check for data file
+  srand(222209); 
+  if (argc < 2)  
     {
     printf("Error, data file missing\n");
     exit(1);
     }
-  const char* datafile = argv[1];   // store datafile as variable
+  const char* datafile = argv[1];  
   uint64_t dlen = 0;
-  uint64_t dimarr = getarrdim();    // seems to generate a random int, 492
+  uint64_t dimarr = getarrdim(); 
   double* arr = new double[dimarr]; // *change arr from array to pointer to allow change of pointer reference
-  double* ptr1 = NULL;              // null pointer?
-  getdata(datafile, arr, dlen);     // seems to store data from datafile to arr
-  compute(arr, ptr1, dlen);         // computes a function of ptr on arr
-  double meanvalue = mean(ptr1, dlen);  //what even
-  printf("meanvalue %15le\n", meanvalue);   // print meanvalue
-  printf("data sample\n");                  // this is just text
+  double* ptr1 = NULL;           
+  getdata(datafile, arr, dlen); 
+  compute(arr, ptr1, dlen);   
+  double meanvalue = mean(ptr1, dlen);
+  printf("meanvalue %15le\n", meanvalue); 
+  printf("data sample\n");               
   for (unsigned int i=0; i<10; i++)
-    printf("%le ", ptr1[i]);              // huh????
+    printf("%le ", ptr1[i]);        
   printf("\n");
   return 0;
 }
