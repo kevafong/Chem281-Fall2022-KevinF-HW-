@@ -22,7 +22,8 @@ double firstDerivative(Derivable& d, const double r)
 {
   double h = 10e-8;
   std::complex<double> realderiv = (d.eval(r+h)-d.eval(r))/h;
-  std::complex<double> i = std::sqrt(-1);
-  std::complex<double> imagderiv = (d.eval(r + i*h)).imag()/h;
-  return realderiv.real();
+  std::complex<double> i = std::complex<double>(0,1);
+  double imagderiv = (d.eval(r + i*h)).imag()/h;
+  //return realderiv.real();
+  return imagderiv;
 }

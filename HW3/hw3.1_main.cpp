@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include <hw3.1.h>
 
+
 #include <MyPotential.h>
 #include <MyCosine.h>
 
