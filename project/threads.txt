@@ -1,0 +1,63 @@
+serial run tool 403 microsecs
+running on 1 threads took 504 microsecs
+right answer 5962 parallel answer: 5962
+
+serial run tool 492 microsecs
+running on 2 threads took 1105 microsecs
+right answer 5962 parallel answer: 5962
+
+serial run tool 396 microsecs
+running on 3 threads took 906 microsecs
+right answer 5962 parallel answer: 5962
+
+serial run tool 462 microsecs
+running on 4 threads took 907 microsecs
+right answer 5962 parallel answer: 5962
+
+serial run tool 398 microsecs
+running on 5 threads took 852 microsecs
+right answer 5962 parallel answer: 5962
+
+serial run tool 392 microsecs
+running on 6 threads took 864 microsecs
+right answer 5962 parallel answer: 5962
+
+serial run tool 384 microsecs
+running on 7 threads took 834 microsecs
+right answer 5962 parallel answer: 5962
+
+serial run tool 432 microsecs
+running on 8 threads took 903 microsecs
+right answer 5962 parallel answer: 5962
+
+serial run tool 406 microsecs
+running on 9 threads took 831 microsecs
+right answer 5962 parallel answer: 5962
+
+serial run tool 399 microsecs
+running on 10 threads took 806 microsecs
+right answer 5962 parallel answer: 5962
+
+serial run tool 509 microsecs
+running on 11 threads took 729 microsecs
+right answer 5962 parallel answer: 5962
+
+serial run tool 439 microsecs
+running on 12 threads took 840 microsecs
+right answer 5962 parallel answer: 5962
+
+serial run tool 409 microsecs
+running on 13 threads took 862 microsecs
+right answer 5962 parallel answer: 5962
+
+serial run tool 390 microsecs
+running on 14 threads took 777 microsecs
+right answer 5962 parallel answer: 5962
+
+serial run tool 454 microsecs
+running on 15 threads took 826 microsecs
+right answer 5962 parallel answer: 5962
+
+serial run tool 392 microsecs
+running on 16 threads took 937 microsecs
+right answer 5962 parallel answer: 5962
