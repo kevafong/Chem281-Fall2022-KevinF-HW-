@@ -94,11 +94,27 @@ void matmulloop(double* __restrict__ amat, double* __restrict__ bmat,
   Experiment with different number of threads. How does the code scale?
   (one thread vs 2 threads vs 4 threads);
    */
-  
-  for (unsigned i=0; i<rowsA; i++)      // loop i
-    for (unsigned k=0; k<colsA; k++)    // loop k
-       for (unsigned j=0; j<colsB; j++) // loop j
-	c[i][j] += a[i][k]*b[k][j];
+  int i,j,k, threadno, numthread;
+  #pragma omp parallel default(shared) private (i,j,k, threadno)
+  {
+    threadno = omp_get_thread_num();
+    numthread = omp_get_num_threads();
+    int threadno_m = threadno/2;
+    int chunksize_m = 2*rowsA/numthread;
+    int chunkstart_m = threadno_m * chunksize_m;
+    int chunkend_m = chunkstart_m + chunksize_m;
+
+
+    int threadno_n = threadno%2;
+    int chunksize_n = 2*colsB/numthread;
+    int chunkstart_n = threadno_n * chunksize_n;
+    int chunkend_n = chunkstart_n + chunksize_n;
+    
+    for (unsigned i=chunkstart_m; i<chunkend_m; i++)      // loop i
+      for (unsigned k=0; k<colsA; k++)    // loop k
+        for (unsigned j=chunkstart_n; j<chunkend_n; j++) // loop j
+    c[i][j] += a[i][k]*b[k][j];
+  }
 }
 
 
@@ -127,14 +143,25 @@ void matmultile(double* __restrict__ amat, double* __restrict__ bmat,
   const unsigned int s=tilei;
   const unsigned int p=tilej;
   const unsigned int t=tilek;
-
-  for (unsigned i=0; i<rowsA; i++)      // loop i
-    for (unsigned k=0; k<colsA; k++)    // loop k
-       for (unsigned j=0; j<colsB; j++)
+  
+    std::cout<<"S:"<<s<<std::endl;
+    std::cout<<"P:"<<p<<std::endl;
+    std::cout<<"T:"<<t<<std::endl;
   //#pragma omp parallel default(shared) private (i)
   {
+    for (unsigned i=0; i<rowsA; i += s)
+      for (unsigned k=0; k<colsA; k += t)
+        for (unsigned j=0; j<colsB; j += p)
+    {
     // Write the inner loop here
-    
+
+    for (unsigned ii=i; ii<i+s; ii++)      // loop i
+      for (unsigned kk=k; kk<k+t; kk++)    // loop k
+        for (unsigned jj=j; jj<j+p; jj++) // loop j
+        {
+          c[i][j] += a[i][k]*b[k][j];
+        }
+    }
     // Then parallelize it using OpenMP
   }
 }
@@ -213,7 +240,7 @@ int main(int argc, const char* argv[])
   srand(223011);
   P2Config config = parseargs(argc-1, argv+1);
 
-  unsigned int size = 2;
+  unsigned int size = 256;
   unsigned int rowsA=size;
   unsigned int colsA=size;
   unsigned int colsB=size;
@@ -225,26 +252,26 @@ int main(int argc, const char* argv[])
   Timer281 t;
   fillMatrices(a, b, c, rowsA, colsA, colsB);
 
-  for (int i = 0; i < rowsA; i++) {
-    for (int j = 0; j < colsA; j++) {
-      std::cout<<a[i*rowsA+j]<<"\t";
-    }
-    std::cout<<"\n";
-  }
-  std::cout<<"\n";
-  for (int i = 0; i < colsA; i++) {
-    for (int j = 0; j < colsB; j++) {
-      std::cout<<b[i*colsA+j]<<"\t";
-    }
-    std::cout<<"\n";
-  }
-  std::cout<<"\n";
-  for (int i = 0; i < rowsA; i++) {
-    for (int j = 0; j < colsB; j++) {
-      std::cout<<c[i*rowsA+j]<<"\t";
-    }
-    std::cout<<"\n";
-  }
+  // for (int i = 0; i < rowsA; i++) {
+  //   for (int j = 0; j < colsA; j++) {
+  //     std::cout<<a[i*rowsA+j]<<"\t";
+  //   }
+  //   std::cout<<"\n";
+  // }
+  // std::cout<<"\n";
+  // for (int i = 0; i < colsA; i++) {
+  //   for (int j = 0; j < colsB; j++) {
+  //     std::cout<<b[i*colsA+j]<<"\t";
+  //   }
+  //   std::cout<<"\n";
+  // }
+  // std::cout<<"\n";
+  // for (int i = 0; i < rowsA; i++) {
+  //   for (int j = 0; j < colsB; j++) {
+  //     std::cout<<c[i*rowsA+j]<<"\t";
+  //   }
+  //   std::cout<<"\n";
+  // }
     
   
 #pragma omp parallel
@@ -266,6 +293,7 @@ int main(int argc, const char* argv[])
   if (config.runMode==TILED)
     {
     t.start();
+    std::cout<<"Time"<<std::endl;
     matmultile(a, b , c, rowsA, colsA, colsB, config.row_tile,
 	       config.col_tile, config.inner_tile);
     uint64_t slice_time = t.stop();
@@ -273,12 +301,12 @@ int main(int argc, const char* argv[])
     printf("Time slice %lu\n", slice_time);
     }
       std::cout<<"\n";
-  for (int i = 0; i < rowsA; i++) {
-    for (int j = 0; j < colsB; j++) {
-      std::cout<<c[i*rowsA+j]<<"\t";
-    }
-    std::cout<<"\n";
-  }
+  // for (int i = 0; i < rowsA; i++) {
+  //   for (int j = 0; j < colsB; j++) {
+  //     std::cout<<c[i*rowsA+j]<<"\t";
+  //   }
+  //   std::cout<<"\n";
+  // }
 #if defined BLAS_ENABLED
   if (config.runMode==BLAS)
     {
