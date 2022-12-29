@@ -1,0 +1,164 @@
+matmulloop
+number of threads=1
+Time loop 24962333
+
+number of threads=2
+Time loop 18137985
+
+number of threads=4
+Time loop 14559707
+
+number of threads=8
+Time loop 33117702
+
+number of threads=16
+Time loop 33059260
+
+
+matmulltile
+runMode TILED, row_tile set to 4
+runMode TILED, col_tile set to 4
+runMode TILED, inner_tile set to 4
+number of threads set to 4
+number of threads=4
+Time slice 16117079
+
+runMode TILED, row_tile set to 8
+runMode TILED, col_tile set to 8
+runMode TILED, inner_tile set to 8
+number of threads set to 4
+number of threads=4
+Time slice 21954492
+
+runMode TILED, row_tile set to 16
+runMode TILED, col_tile set to 16
+runMode TILED, inner_tile set to 16
+number of threads set to 4
+number of threads=4
+Time slice 20169276
+
+runMode TILED, row_tile set to 32
+runMode TILED, col_tile set to 32
+runMode TILED, inner_tile set to 32
+number of threads set to 4
+number of threads=4
+Time slice 15850638
+
+runMode TILED, row_tile set to 64
+runMode TILED, col_tile set to 64
+runMode TILED, inner_tile set to 64
+number of threads set to 4
+number of threads=4
+Time slice 17392806
+
+runMode TILED, row_tile set to 128
+runMode TILED, col_tile set to 128
+runMode TILED, inner_tile set to 128
+number of threads set to 4
+number of threads=4
+Time slice 16525486
+
+runMode TILED, row_tile set to 256
+runMode TILED, col_tile set to 256
+runMode TILED, inner_tile set to 256
+number of threads set to 4
+number of threads=4
+Time slice 16486557
+
+runMode TILED, row_tile set to 512
+runMode TILED, col_tile set to 512
+runMode TILED, inner_tile set to 512
+number of threads set to 4
+number of threads=4
+Time slice 24140865
+
+for 2048x2048
+
+runMode TILED, row_tile set to 8
+runMode TILED, col_tile set to 8
+runMode TILED, inner_tile set to 8
+number of threads set to 1
+number of threads=1
+Time slice 13385824
+
+runMode TILED, row_tile set to 8
+runMode TILED, col_tile set to 8
+runMode TILED, inner_tile set to 8
+number of threads set to 2
+number of threads=2
+Time slice 7213159
+
+runMode TILED, row_tile set to 8
+runMode TILED, col_tile set to 8
+runMode TILED, inner_tile set to 8
+number of threads set to 4
+number of threads=4
+Time slice 4080480
+
+runMode TILED, row_tile set to 8
+runMode TILED, col_tile set to 8
+runMode TILED, inner_tile set to 8
+number of threads set to 8
+number of threads=8
+Time slice 2438241
+
+runMode TILED, row_tile set to 2
+runMode TILED, col_tile set to 2
+runMode TILED, inner_tile set to 2
+number of threads=8
+Time slice 2638840
+
+runMode TILED, row_tile set to 4
+runMode TILED, col_tile set to 4
+runMode TILED, inner_tile set to 4
+number of threads=8
+Time slice 2438171
+
+runMode TILED, row_tile set to 8
+runMode TILED, col_tile set to 8
+runMode TILED, inner_tile set to 8
+number of threads=8
+Time slice 2428143
+
+runMode TILED, row_tile set to 16
+runMode TILED, col_tile set to 16
+runMode TILED, inner_tile set to 16
+number of threads=8
+Time slice 2441766
+
+runMode TILED, row_tile set to 32
+runMode TILED, col_tile set to 32
+runMode TILED, inner_tile set to 32
+number of threads=8
+Time slice 2470924
+
+runMode TILED, row_tile set to 64
+runMode TILED, col_tile set to 64
+runMode TILED, inner_tile set to 64
+number of threads=8
+Time slice 2595556
+
+runMode TILED, row_tile set to 128
+runMode TILED, col_tile set to 128
+runMode TILED, inner_tile set to 128
+number of threads set to 8
+number of threads=8
+Time slice 3084377
+
+runMode TILED, row_tile set to 256
+runMode TILED, col_tile set to 256
+runMode TILED, inner_tile set to 256
+number of threads=8
+Time slice 3259428
+
+runMode TILED, row_tile set to 1024
+runMode TILED, col_tile set to 1024
+runMode TILED, inner_tile set to 1024
+number of threads=8
+Time slice 13020146
+
+runMode TILED, row_tile set to 2048
+runMode TILED, col_tile set to 2048
+runMode TILED, inner_tile set to 2048
+number of threads=8
+Time slice 14145459

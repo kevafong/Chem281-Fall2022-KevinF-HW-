@@ -1,5 +1,5 @@
 #!/bin/bash
-if [ $argc = 0 ]; then
+if [[ $argc == 0 ]]; then
    echo "usage: ./cmpfile.sh <sourcefilename.cpp>"
 else
 execname=`basename $1|sed 's|.cpp||'`
